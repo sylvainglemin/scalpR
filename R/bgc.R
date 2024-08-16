@@ -56,12 +56,12 @@ sum_of_squares <- function(par,WS,SW,GC) {
   # True SFS as a function of observed one.
   WSt <- ((1 - e2)*WS - e2*rev(SW))/(1 - e1 - e2)
   SWt <- ((1 - e1)*SW - e1*rev(WS))/(1 - e1 - e2)
-  # Same expression withou 1-e1-e2 that simplifies in ratios
+  # Same expression without 1-e1-e2 that simplifies in ratios
   WSt2 <- ((1 - e2)*WS - e2*rev(SW))
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WSt2*SWt2/(WSt2 + SWt2)
   x <- c(1:(n-1))/n
-  y <- log(WSt2/SWt2) # - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2)  - 1/(2*WSt) + 1/(2*SWt)
   ypred <- B*x - M - log(GC) + log(1 - GC)
   removeNA <- !is.na(y)
   w <- w[removeNA]
@@ -111,18 +111,22 @@ gr_sum_of_squares <- function(par,WS,SW,GC) {
   # True SFS as a function of observed one.
   WSt <- ((1-e2)*WS - e2*rev(SW))/(1 - e1 - e2)
   SWt <- ((1-e1)*SW - e1*rev(WS))/(1 - e1 - e2)
-  # Same expression withou 1-e1-e2 that simplifies in ratios
+  # Same expression without 1-e1-e2 that simplifies in ratios
   WSt2 <- ((1 - e2)*WS - e2*rev(SW))
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WSt2*SWt2/(WSt2 + SWt2)
   x <- c(1:(n-1))/n
-  y <- log(WSt2/SWt2) # - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
   ypred <- B*x - M - log(GC) + log(1 - GC)
 ## TO BE COMPLETED
   # Derivative of y as a function of error rates
   # Approximated version, derivative of log(WSt2/SWt2) without additional terms
-  dy1 <- (SW + rev(WS))/((1 - e1)*SW - e1*rev(WS))
-  dy2 <- (rev(SW) + WS)/(e2*rev(SW) - (1 - e2)*WS)
+  dy1 <- (SW + rev(WS))/((1 - e1)*SW - e1*rev(WS)) + # Log term
+    1/(2*((1 - e2)*WS - e2*rev(SW))) + # First ratio term
+    ((1 - e2)*rev(WS) - e2*SW)/(2*((1 - e1)*SW - e1*rev(WS))^2) # Second ratio term
+  dy2 <- (rev(SW) + WS)/(e2*rev(SW) - (1 - e2)*WS) + # Log term
+    (e1*WS - (1 - e1)*rev(SW))/(2*((1 - e2)*WS - e2*rev(SW))^2) + # First ratio term
+    1/(2*(e1*rev(WS) - (1 - e1)*SW))
   removeNA <- !is.na(y)
   w <- w[removeNA]
   x <- x[removeNA]
@@ -157,6 +161,7 @@ gr_sum_of_squares <- function(par,WS,SW,GC) {
 #' @param FACTR: level of control the convergence (option for optim, see manual), default value = 10^7
 #' @param LMM: number of updates in the method (option for optim, see manual)
 #' @param VERBOSE: from 0 (default) to 5: level of outputs during optimization (option for optim, see manual)
+#' @param USEGR: to use (default) or not the analytical gradient (option for optim, see manual)
 #'
 #'
 #' @return The list of optimized parameters
@@ -170,7 +175,7 @@ gr_sum_of_squares <- function(par,WS,SW,GC) {
 #' LS$mutbias # mutation bias
 
 
-least_square <- function(WS,SW,GC,Bmin=-100,Bmax=100,Mmin=-5,Mmax=5,MAXIT=100,FACTR=10^7,LMM=20,VERBOSE=0,USEGR=F) {
+least_square <- function(WS,SW,GC,Bmin=-100,Bmax=100,Mmin=-5,Mmax=5,MAXIT=100,FACTR=10^7,LMM=20,VERBOSE=0,USEGR=T) {
   # Determination of initial values for optimization: use of the simple regression
   if(length(WS)!=length(SW)) {
     print("ERROR: the two SFSs, WS and SW, must have the same length")
