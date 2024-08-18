@@ -4,6 +4,10 @@
 # sylvain.glemin@univ-rennes.fr
 
 
+# TO DO: CHANGE FUNCTIONS NAMES WHICH ARE THE SAME AS FOR BGC
+
+
+
 # Libraries
 library(hypergeo)
 library(VGAM)
