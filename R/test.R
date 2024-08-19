@@ -11,11 +11,10 @@ least_square_M(sfsWS,sfsSW,0.65)
 least_square_B(sfsWS,sfsSW,0.65)
 least_square_BM(sfsWS,sfsSW,0.65)
 
-total_ss(sfsWS,sfsSW)
 
 system.time(
-  for(i in 1:1000) least_square(sfsWS,sfsSW,0.6,USEGR = F)
+  for(i in 1:1000) least_square_BM(sfsWS,sfsSW,0.6,Usegr = F)
   )
 system.time(
-  for(i in 1:1000) least_square(sfsWS,sfsSW,0.6,USEGR = T)
+  for(i in 1:1000) least_square_BM(sfsWS,sfsSW,0.6,Usegr = T)
 )
