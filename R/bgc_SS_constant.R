@@ -1,8 +1,10 @@
-# Estimation of GC-biased gene conversion intensity from site frequency spectrum data by a least-square approach
+# Estimation of selection and GC-biased gene conversion intensity from site frequency spectrum data by a least-square approach
 # Sylvain Glemin
 # sylvain.glemin@univ-rennes.fr
 
+
 source("R/constants.R")
+source("R/derivatives.R")
 
 
 # Series of SS functions and their corresponding gradient where parameters are constant
@@ -164,20 +166,17 @@ gr_sum_of_squares_M <- function(par,WS,SW,GC) {
   x <- c(1:(n-1))/n
   y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
   ypred <- rep(- M - log(GC) + log(1 - GC),n)
-  ## TO BE COMPLETED
   # Derivative of y as a function of error rates
   # Approximated version, derivative of log(WSt2/SWt2) without additional terms
-  dy1 <- (SW + rev(WS))/((1 - e1)*SW - e1*rev(WS)) + # Log term
-    1/(2*((1 - e2)*WS - e2*rev(SW))) + # First ratio term
-    ((1 - e2)*rev(WS) - e2*SW)/(2*((1 - e1)*SW - e1*rev(WS))^2) # Second ratio term
-  dy2 <- (rev(SW) + WS)/(e2*rev(SW) - (1 - e2)*WS) + # Log term
-    (e1*WS - (1 - e1)*rev(SW))/(2*((1 - e2)*WS - e2*rev(SW))^2) + # First ratio term
-    1/(2*(e1*rev(WS) - (1 - e1)*SW))
+  dy1 <- d_expected_log_ratio(WS,SW,e1,e2)$d1
+  dy2 <- d_expected_log_ratio(WS,SW,e1,e2)$d2
   removeNA <- !is.na(y)
   w <- w[removeNA]
   x <- x[removeNA]
   y <- y[removeNA]
   ypred <- ypred[removeNA]
+  dy1 <- dy1[removeNA]
+  dy2 <- dy2[removeNA]
   grM <- sum(w*(2*(y - ypred))/sum(w))
   gre1 <- sum(w*(2*(y - ypred)*dy1)/sum(w))
   gre2 <- sum(w*(2*(y - ypred)*dy2)/sum(w))
@@ -262,7 +261,7 @@ sum_of_squares_B <- function(par,WS,SW,GC) {
 #'
 #' @description Gradient of the sum of squares function
 #'
-#' @param par: a vector with the for parameters of the model.
+#' @param par: a vector with the four parameters of the model.
 #' par[1] = B
 #' par[2] = e1
 #' par[3] = e2
@@ -301,20 +300,17 @@ gr_sum_of_squares_B <- function(par,WS,SW,GC) {
   x <- c(1:n)/(n+1)
   y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
   ypred <- B*x - log(GC) + log(1 - GC)
-  ## TO BE COMPLETED
   # Derivative of y as a function of error rates
   # Approximated version, derivative of log(WSt2/SWt2) without additional terms
-  dy1 <- (SW + rev(WS))/((1 - e1)*SW - e1*rev(WS)) + # Log term
-    1/(2*((1 - e2)*WS - e2*rev(SW))) + # First ratio term
-    ((1 - e2)*rev(WS) - e2*SW)/(2*((1 - e1)*SW - e1*rev(WS))^2) # Second ratio term
-  dy2 <- (rev(SW) + WS)/(e2*rev(SW) - (1 - e2)*WS) + # Log term
-    (e1*WS - (1 - e1)*rev(SW))/(2*((1 - e2)*WS - e2*rev(SW))^2) + # First ratio term
-    1/(2*(e1*rev(WS) - (1 - e1)*SW))
+  dy1 <- d_expected_log_ratio(WS,SW,e1,e2)$d1
+  dy2 <- d_expected_log_ratio(WS,SW,e1,e2)$d2
   removeNA <- !is.na(y)
   w <- w[removeNA]
   x <- x[removeNA]
   y <- y[removeNA]
   ypred <- ypred[removeNA]
+  dy1 <- dy1[removeNA]
+  dy2 <- dy2[removeNA]
   grB <- sum(w*(-2*x*(y - ypred))/sum(w))
   gre1 <- sum(w*(2*(y - ypred)*dy1)/sum(w))
   gre2 <- sum(w*(2*(y - ypred)*dy2)/sum(w))
@@ -399,7 +395,7 @@ sum_of_squares_BM <- function(par,WS,SW,GC) {
 #'
 #' @description Gradient of the sum of squares function
 #'
-#' @param par: a vector with the for parameters of the model.
+#' @param par: a vector with the four parameters of the model.
 #' par[1] = B
 #' par[2] = M (i.e. log(mut_bias))
 #' par[3] = e1
@@ -440,20 +436,17 @@ gr_sum_of_squares_BM <- function(par,WS,SW,GC) {
   x <- c(1:n)/(n+1)
   y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
   ypred <- B*x - M - log(GC) + log(1 - GC)
-## TO BE COMPLETED
   # Derivative of y as a function of error rates
   # Approximated version, derivative of log(WSt2/SWt2) without additional terms
-  dy1 <- (SW + rev(WS))/((1 - e1)*SW - e1*rev(WS)) + # Log term
-    1/(2*((1 - e2)*WS - e2*rev(SW))) + # First ratio term
-    ((1 - e2)*rev(WS) - e2*SW)/(2*((1 - e1)*SW - e1*rev(WS))^2) # Second ratio term
-  dy2 <- (rev(SW) + WS)/(e2*rev(SW) - (1 - e2)*WS) + # Log term
-    (e1*WS - (1 - e1)*rev(SW))/(2*((1 - e2)*WS - e2*rev(SW))^2) + # First ratio term
-    1/(2*(e1*rev(WS) - (1 - e1)*SW))
+  dy1 <- d_expected_log_ratio(WS,SW,e1,e2)$d1
+  dy2 <- d_expected_log_ratio(WS,SW,e1,e2)$d2
   removeNA <- !is.na(y)
   w <- w[removeNA]
   x <- x[removeNA]
   y <- y[removeNA]
   ypred <- ypred[removeNA]
+  dy1 <- dy1[removeNA]
+  dy2 <- dy2[removeNA]
   grB <- sum(w*(-2*x*(y - ypred))/sum(w))
   grM <- sum(w*(2*(y - ypred))/sum(w))
   gre1 <- sum(w*(2*(y - ypred)*dy1)/sum(w))

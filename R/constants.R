@@ -1,3 +1,7 @@
+# Estimation of selection and GC-biased gene conversion intensity from site frequency spectrum data by a least-square approach
+# Sylvain Glemin
+# sylvain.glemin@univ-rennes.fr
+
 # Files with constants and default parameters
 
 # Constants used when functions are not defined in 0

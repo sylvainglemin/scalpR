@@ -1,7 +1,7 @@
-# Estimation of DFE from site frequency spectrum data by a least-square approach
-# Approach similar to the estimation of gBGC
+# Estimation of selection and GC-biased gene conversion intensity from site frequency spectrum data by a least-square approach
 # Sylvain Glemin
 # sylvain.glemin@univ-rennes.fr
+
 
 
 # TO DO: CHANGE FUNCTIONS NAMES WHICH ARE THE SAME AS FOR BGC
