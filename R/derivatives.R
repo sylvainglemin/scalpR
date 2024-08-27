@@ -8,12 +8,12 @@
 # COMMENTS OF FUNCTIONS TO ADD
 
 d_expected_log_ratio <- function(WS,SW,e1,e2){
-  d1 <- (SW + rev(WS))/((1 - e1)*SW - e1*rev(WS)) + # Log term
-    1/(2*((1 - e2)*WS - e2*rev(SW))) + # First ratio term
-    ((1 - e2)*rev(WS) - e2*SW)/(2*((1 - e1)*SW - e1*rev(WS))^2) # Second ratio term
+  d1 <- (SW + rev(WS))/((1 - e1)*SW - e1*rev(WS)) - # Log term
+    1/((1 - e2)*WS - e2*rev(SW)) + # First ratio term
+    ((1 - e2)*rev(WS) - e2*SW)/(((1 - e1)*SW - e1*rev(WS))^2) # Second ratio term
   d2 <- (rev(SW) + WS)/(e2*rev(SW) - (1 - e2)*WS) + # Log term
-    (e1*WS - (1 - e1)*rev(SW))/(2*((1 - e2)*WS - e2*rev(SW))^2) + # First ratio term
-    1/(2*(e1*rev(WS) - (1 - e1)*SW))
+    ((1 - e1)*rev(SW) - e1*WS)/(((1 - e2)*WS - e2*rev(SW))^2) - # First ratio term
+    1/((e1*rev(WS) - (1 - e1)*SW))
   return(list("d1"=d1,"d2"=d2))
 }
 

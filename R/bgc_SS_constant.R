@@ -39,7 +39,7 @@ sum_of_squares_NULL <- function(WS,SW,GC) {
     return(NA)
   }
   w <- WS*SW/(WS + SW)
-  y <- log(WS/SW)  - 1/(2*WS) + 1/(2*SW)
+  y <- log(WS/SW) + 1/(WS) - 1/(SW)
   removeNA <- !is.na(y)
   w <- w[removeNA]
   SW <- SW[removeNA]
@@ -113,7 +113,7 @@ sum_of_squares_M <- function(par,WS,SW,GC) {
   # The gradient function is also more complicated
   # Instead we use the weight as a function of observed SFSs
   w <- WS*SW/(WS + SW)
-  y <- log(WSt2/SWt2)  - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- rep(- M - log(GC) + log(1 - GC),n)
   removeNA <- !is.na(y)
   w <- w[removeNA]
@@ -157,14 +157,14 @@ gr_sum_of_squares_M <- function(par,WS,SW,GC) {
   e2 <- par[3]
   n <- length(WS)
   # True SFS as a function of observed one.
-  WSt <- ((1-e2)*WS - e2*rev(SW))/(1 - e1 - e2)
-  SWt <- ((1-e1)*SW - e1*rev(WS))/(1 - e1 - e2)
+  WSt <- ((1 - e2)*WS - e2*rev(SW))/(1 - e1 - e2)
+  SWt <- ((1 - e1)*SW - e1*rev(WS))/(1 - e1 - e2)
   # Same expression without 1-e1-e2 that simplifies in ratios
   WSt2 <- ((1 - e2)*WS - e2*rev(SW))
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WS*SW/(WS + SW)
   x <- c(1:(n-1))/n
-  y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- rep(- M - log(GC) + log(1 - GC),n)
   # Derivative of y as a function of error rates
   # Approximated version, derivative of log(WSt2/SWt2) without additional terms
@@ -247,7 +247,7 @@ sum_of_squares_B <- function(par,WS,SW,GC) {
   # Instead we use the weight as a function of observed SFSs
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2)  - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- B*x - log(GC) + log(1 - GC)
   removeNA <- !is.na(y)
   w <- w[removeNA]
@@ -298,7 +298,7 @@ gr_sum_of_squares_B <- function(par,WS,SW,GC) {
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- B*x - log(GC) + log(1 - GC)
   # Derivative of y as a function of error rates
   # Approximated version, derivative of log(WSt2/SWt2) without additional terms
@@ -381,7 +381,7 @@ sum_of_squares_BM <- function(par,WS,SW,GC) {
   # Instead we use the weight as a function of observed SFSs
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2)  - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- B*x - M - log(GC) + log(1 - GC)
   removeNA <- !is.na(y)
   w <- w[removeNA]
@@ -434,7 +434,7 @@ gr_sum_of_squares_BM <- function(par,WS,SW,GC) {
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- B*x - M - log(GC) + log(1 - GC)
   # Derivative of y as a function of error rates
   # Approximated version, derivative of log(WSt2/SWt2) without additional terms

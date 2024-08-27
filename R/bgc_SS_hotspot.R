@@ -75,7 +75,7 @@ sum_of_squares_hotspot1 <- function(par,WS,SW,GC) {
   # Instead we use the weight as a function of observed SFSs
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2)  - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- - M - log(GC) + log(1 - GC) +
     log((1 - f)*ratio_B(0,x) + f*ratio_B(B,x)) -
     log((1 - f)*ratio_B(0,x) + f*ratio_B(-B,x))
@@ -133,7 +133,7 @@ gr_sum_of_squares_hotspot1 <- function(par,WS,SW,GC) {
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- - M - log(GC) + log(1 - GC) +
     log((1 - f)*ratio_B(0,x) + f*ratio_B(B,x)) -
     log((1 - f)*ratio_B(0,x) + f*ratio_B(-B,x))
@@ -233,7 +233,7 @@ sum_of_squares_hotspot2 <- function(par,WS,SW,GC) {
   # Instead we use the weight as a function of observed SFSs
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2)  - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- - M - log(GC) + log(1 - GC) +
     log((1 - f)*ratio_B(B0,x) + f*ratio_B(B1,x)) -
     log((1 - f)*ratio_B(-B0,x) + f*ratio_B(-B1,x))
@@ -293,7 +293,7 @@ gr_sum_of_squares_hotspot2 <- function(par,WS,SW,GC) {
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- - M - log(GC) + log(1 - GC) +
     log((1 - f)*ratio_B(B0,x) + f*ratio_B(B1,x)) -
     log((1 - f)*ratio_B(-B0,x) + f*ratio_B(-B1,x))
@@ -395,7 +395,7 @@ sum_of_squares_hotspot2bis <- function(par,WS,SW,GC,f) {
   # Instead we use the weight as a function of observed SFSs
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2)  - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- - M - log(GC) + log(1 - GC) +
     log((1 - f)*ratio_B(B0,x) + f*ratio_B(B1,x)) -
     log((1 - f)*ratio_B(-B0,x) + f*ratio_B(-B1,x))
@@ -458,7 +458,7 @@ gr_sum_of_squares_hotspot2bis <- function(par,WS,SW,GC,f) {
   SWt2 <- ((1 - e1)*SW - e1*rev(WS))
   w <- WS*SW/(WS + SW)
   x <- c(1:n)/(n+1)
-  y <- log(WSt2/SWt2) - 1/(2*WSt) + 1/(2*SWt)
+  y <- log(WSt2/SWt2) + 1/(WSt) - 1/(SWt)
   ypred <- - M - log(GC) + log(1 - GC) +
     log((1 - f)*ratio_B(B0,x) + f*ratio_B(B1,x)) -
     log((1 - f)*ratio_B(-B0,x) + f*ratio_B(-B1,x))
